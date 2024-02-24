@@ -51,3 +51,86 @@ Write your code in arithmetic_arranger.py. For development, you can use main.py 
 
 ### Testing
 The unit tests for this project are in test_module.py. We are running the tests from test_module.py in main.py for your convenience. The tests will run automatically whenever you hit the "run" button. Alternatively you may run the tests by inputting pytest in the console.
+
+
+## Notes about my solution
+
+This is my second attempted sollution to this challenge, because for my first attempt I failed to get the errors to work properly, because i was using multiple seperate function within the main function to achieve the desired functionallity, I couldn't use `return` to break out of the loop when an error occoured. See old solution below: 
+
+### My final solution 
+Beucase of my earlier attempt failing due to the fact I couldn't exit the loop in case of an error I decided to put all the funtionallity in one loop, which turned out not to be a bad solution since I also managed to optimise the solution to the point it has less than 100 lines total. 
+
+```
+def arithmetic_arranger(problems):
+    problem_spacing = '    '
+    first_line = ''
+    second_line = ''
+    divider_line = ''
+    result_line = ''
+    for problem in problems: 
+        if len(problems) > 5:
+            print('Error: Too many problems.')
+        if '+' not in problem and '-' not in problem:
+            print("Error: Operator must be '+' or '-'.")
+        if '+' in problem:
+            problem = function(problem, '+')
+        else: 
+            problem = function(problem, '-')
+        
+        if error != 'false': 
+            break
+
+        # find problem width
+        first_len = len(str(problem[0]))
+        second_len = len(str(problem[1]))
+        result_len = len(str(problem[2]))
+        problem_width = 0
+        if first_len > second_len:
+            problem_width = first_len + 2
+        else:
+            problem_width = second_len + 2
+        
+        # format first line
+        first_line += num_to_whitespace(problem_width - first_len) + str(problem[0]) + problem_spacing
+        
+        # format second line
+        second_line += num_to_whitespace(problem_width - second_len) + str(problem[1]) + problem_spacing
+
+        # format divider line
+        for i in range(1, problem_width):
+            divider_line += '-'
+        divider_line += problem_spacing
+
+        # format result line
+        result_line += num_to_whitespace(problem_width - result_len) + str(problem[2]) + problem_spacing
+        return f'{first_line}\n{second_line}\n{divider_line}\n{result_line}'
+
+def function(problem, opperator):
+    problem = problem.split(opperator)
+    first, second = problem
+    first = int(first)
+    global error 
+    errors(first)
+    second = int(second)
+    errors(second)
+    if opperator == '+':
+        result = first + second
+    else:
+        result = first - second
+    return [first, second, result]
+
+def num_to_whitespace(value):
+    whitespace = ''
+    for i in range(1, value):
+        whitespace += ' '
+    return whitespace
+
+def errors(num):
+    if type(num) != int:
+        print('Error: Numbers must only contain digits.')
+    elif num > 4:
+        print('Error: Numbers cannot be more than four digits.')
+
+print(arithmetic_arranger(["43322 + 698", "3801 - 2", "45 + 43", "123 + 49"]))
+
+```
